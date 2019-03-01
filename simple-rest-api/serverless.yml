@@ -1,0 +1,55 @@
+service: crud-api # NOTE: update this with your service name
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-2
+  timeout: 300
+  apiKeys:
+    - todoAPI
+
+# you can add packaging information here
+package:
+ include:
+   - features/**
+   - models/**
+
+functions:
+  getTodo:
+    handler: features/read.getTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: get
+          private: true
+  listTodos:
+    handler: features/read.listTodos
+    events:
+      - http:
+          path: todos
+          method: get
+  createTodo:
+    handler: features/create.createTodo
+    events:
+      - http:
+          path: todo
+          method: post
+          private: true
+  deleteTodo:
+    handler: features/delete.deleteTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: delete
+          private: true
+  updateTodo:
+    handler: features/update.updateTodo
+    events:
+      - http:
+          path: todo/{id}
+          method: patch
+          private: true
